@@ -1,0 +1,44 @@
+name = "cf-ai-my-photos"
+main = "src/index.ts"
+compatibility_date = "2024-11-15"
+node_compat = true
+
+# Workers AI binding
+[ai]
+binding = "AI"
+
+# R2 bucket for photos
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "photography-portfolio"
+
+# KV namespace for chat memory
+[[kv_namespaces]]
+binding = "CHAT_MEMORY"
+id = "your-kv-namespace-id-here"
+
+# Durable Objects
+[[durable_objects.bindings]]
+name = "BOOKING_WORKFLOW"
+class_name = "BookingWorkflow"
+script_name = "cf-ai-my-photos"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["BookingWorkflow"]
+
+# Environment variables (use wrangler secret for sensitive values)
+[vars]
+GOOGLE_CALENDAR_ID = "your-calendar-id@group.calendar.google.com"
+
+# Development configuration
+[env.dev]
+name = "cf-ai-my-photos-dev"
+
+[[env.dev.kv_namespaces]]
+binding = "CHAT_MEMORY"
+id = "your-dev-kv-namespace-id-here"
+
+[[env.dev.r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "photography-portfolio-dev"
