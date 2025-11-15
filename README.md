@@ -192,8 +192,8 @@ Using Llama 3.3 70B Instruct model:
 
 ## Contact
 
-For questions or support, contact: shriyasateesh@example.com
+Shriya Sateesh, sshriya@cs.washington.edu
 
----
+![gif of cat spinning on skateboard](https://media.tenor.com/y8zjaIK8rpoAAAAM/cat-on-skateboard-cat.gif)
 
 Built using Cloudflare Workers, Hono, and Workers AI
