@@ -34,4 +34,4 @@ class_name = "NoteCoordinator"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["ChatSession", "NoteCoordinator"]
+new_sqlite_classes = ["ChatSession", "NoteCoordinator"]
