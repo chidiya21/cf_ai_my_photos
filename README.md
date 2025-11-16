@@ -4,7 +4,7 @@ A personal AI-powered songwriting assistant built with Cloudflare Workers. Featu
 
 ## Live Demo
 
-**Deployed at:** [Your deployment URL here] to Cloudflare Workers.
+**Deployed at:** https://ai-songbook.chidiya.workers.dev/ to Cloudflare Workers.
 
 ![AI Songbook App Screenshot](screenshot.png)
 
