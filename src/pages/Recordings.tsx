@@ -179,6 +179,18 @@ export const RecordingsPage = () => {
       transition: all 0.2s;
     }
 
+    @media (max-width: 600px) {
+    .recording-actions {
+      flex-direction: column; /* Stack buttons vertically */
+      gap: 0.5rem; /* Reduce gap between buttons */
+    }
+
+    .recording-actions button {
+      font-size: 0.85rem; /* Make text smaller */
+      padding: 0.4rem 0.8rem; /* Adjust padding to make buttons more compact */
+    }
+  }
+
     .recording-actions button:hover {
       background: #f5f5f5;
       border-color: var(--bg-dark);
@@ -214,7 +226,7 @@ export const RecordingsPage = () => {
         </p>
         <input type="file" id="fileInput" accept="audio/*" style="display: none;" onchange="handleFileUpload(event)" />
         <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-          🎤 Choose File
+        Choose File
         </button>
       </div>
 
