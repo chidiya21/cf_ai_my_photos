@@ -34,3 +34,9 @@ We will use Hono for routing and JSX-rendered pages.
 Thank you!
 
 ---
+
+## 2025-11-15 (Docker Setup)
+
+**PROMPT:** I would like to Dockerize my app using Docker and docker-compose so it can run easily in any environment. Please add a Dockerfile and a docker-compose.yml, update the README with instructions for building and running the container, and ensure it works with our current Node, Wrangler, and Cloudflare Workers setup. Thanks!
+
+---

@@ -24,11 +24,38 @@ An AI-powered songwriting assistant built with Cloudflare Workers, featuring a b
 
 ### Prerequisites
 
+**Option 1: Local Development**
 - Node.js 18+
 - Cloudflare account
 - Wrangler CLI
 
+**Option 2: Docker (Recommended)**
+- Docker 20.10+
+- Docker Compose 2.0+
+- Cloudflare account
+
 ### Installation
+
+#### Using Docker (Recommended)
+
+1. **Build and start the development container:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **View logs:**
+   ```bash
+   docker-compose logs -f songbook-dev
+   ```
+
+3. **Stop the container:**
+   ```bash
+   docker-compose down
+   ```
+
+The app will be available at `http://localhost:8787`
+
+#### Using Local Node
 
 ```bash
 npm install
@@ -38,11 +65,19 @@ npm install
 
 1. Create a KV namespace:
 ```bash
+# If using Docker:
+docker-compose exec songbook-dev wrangler kv:namespace create NOTES_KV
+
+# If using local Node:
 wrangler kv:namespace create NOTES_KV
 ```
 
 2. Create an R2 bucket:
 ```bash
+# If using Docker:
+docker-compose exec songbook-dev wrangler r2 bucket create songbook-recordings
+
+# If using local Node:
 wrangler r2 bucket create songbook-recordings
 ```
 
@@ -50,16 +85,74 @@ wrangler r2 bucket create songbook-recordings
 
 ### Development
 
+#### Using Docker
+
+```bash
+# Start development server
+docker-compose up
+
+# Or run in detached mode
+docker-compose up -d
+
+# Rebuild container after dependency changes
+docker-compose up --build
+```
+
+Visit `http://localhost:8787`
+
+#### Using Local Node
+
 ```bash
 npm run dev
 ```
 
 Visit `http://localhost:8787`
 
-### Deployment
+### Production Testing (Docker)
+
+Test the production build locally before deploying:
 
 ```bash
+docker-compose --profile production up songbook-prod
+```
+
+Visit `http://localhost:8788`
+
+### Deployment
+
+Deploy to Cloudflare Workers:
+
+```bash
+# If using Docker:
+docker-compose exec songbook-dev npm run deploy
+
+# If using local Node:
 npm run deploy
+```
+
+### Docker Commands Reference
+
+```bash
+# Build the image
+docker-compose build
+
+# Start services
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f songbook-dev
+
+# Execute commands in container
+docker-compose exec songbook-dev <command>
+
+# Restart services
+docker-compose restart
+
+# Remove containers and volumes
+docker-compose down -v
 ```
 
 ## Project Structure

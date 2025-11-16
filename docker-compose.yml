@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Development service
+  songbook-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: ai-songbook-dev
+    ports:
+      - "8787:8787"
+    volumes:
+      # Mount source code for hot reloading
+      - ./src:/app/src
+      - ./wrangler.toml:/app/wrangler.toml
+      # Preserve node_modules in container
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - WRANGLER_SEND_METRICS=false
+    command: npm run dev
+    networks:
+      - songbook-network
+    restart: unless-stopped
+
+  # Production service (for local testing before deploy)
+  songbook-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: ai-songbook-prod
+    ports:
+      - "8788:8787"
+    environment:
+      - NODE_ENV=production
+      - WRANGLER_SEND_METRICS=false
+    networks:
+      - songbook-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+networks:
+  songbook-network:
+    driver: bridge
+
+volumes:
+  node_modules:
