@@ -1,0 +1,30 @@
+name = "ai-songbook"
+main = "src/index.tsx"
+compatibility_date = "2024-11-15"
+
+# Workers AI binding
+[ai]
+binding = "AI"
+
+# KV namespace for notes and metadata
+[[kv_namespaces]]
+binding = "NOTES_KV"
+id = "your-kv-namespace-id"
+
+# R2 bucket for audio recordings
+[[r2_buckets]]
+binding = "RECORDINGS"
+bucket_name = "songbook-recordings"
+
+# Durable Objects
+[[durable_objects.bindings]]
+name = "CHAT_SESSION"
+class_name = "ChatSession"
+
+[[durable_objects.bindings]]
+name = "NOTE_COORDINATOR"
+class_name = "NoteCoordinator"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatSession", "NoteCoordinator"]
