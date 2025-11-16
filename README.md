@@ -1,6 +1,6 @@
 # AI Songwriting Notebook
 
-A personal AI-powered songwriting assistant built with Cloudflare Workers. Features a notebook-style interface for writing lyrics with real-time AI collaboration.
+My personal AI-powered songwriting assistant built with Cloudflare Workers. Features a notebook-style interface for writing lyrics with real-time AI collaboration.
 
 ## Live Demo
 
