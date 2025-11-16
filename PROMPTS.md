@@ -50,3 +50,9 @@ Thank you!
 ## 2025-11-16 (Added Images)
 
 **PROMPT:** I have now also added images in the imgs folder to use as a background for the writing feature, the logo, the chat button on the right of the writing page for AI-assisted writing, and a profile photo. Please integrate them, they are svgs, thanks!
+
+---
+
+## 2025-11-16 (Text Selection)
+
+**PROMPT:** Can you add text selection so that the AI co-writer can have context for the lyric help? Thanks!

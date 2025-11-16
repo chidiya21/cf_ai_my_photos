@@ -1,4 +1,4 @@
-import { html } from 'hono/html';
+import { html } from 'hono/html'; 
 
 export const WritingPage = () => {
   return html`<!DOCTYPE html>
@@ -31,7 +31,6 @@ export const WritingPage = () => {
       min-height: 100vh;
     }
 
-    /* Navigation */
     nav {
       display: flex;
       align-items: center;
@@ -80,7 +79,6 @@ export const WritingPage = () => {
       color: white;
     }
 
-    /* Main content area */
     main {
       padding: 2rem;
       max-width: 1400px;
@@ -96,6 +94,7 @@ export const WritingPage = () => {
       max-width: 900px;
       margin: 0 auto;
       perspective: 1000px;
+      position: relative;
     }
 
     .notebook {
@@ -104,88 +103,84 @@ export const WritingPage = () => {
       background-position: center top;
       background-repeat: no-repeat;
       position: relative;
-      height: auto;
       width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 4rem 3rem 3rem 3rem;
+      aspect-ratio: 8.5 / 11;
+      min-height: 600px;
     }
 
-    .notebook-content {
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
+    .sticky-note {
+      position: absolute;
+      top: 10%;
+      right: 15%;
+      text-align: right;
+      max-width: 20%;
     }
 
-    /* Title input */
-    .title-input {
+    .sticky-note input {
+      font-size: clamp(12px, 1.2vw, 18px);
       background: transparent;
       border: none;
       font-family: 'Courier New', monospace;
-      font-size: 1.5rem;
+      color: var(--text-dark);
+      text-align: right;
+      outline: none;
+      margin-bottom: 0.25rem;
       font-weight: bold;
       width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      color: var(--text-dark);
-      outline: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .title-input::placeholder {
-      color: rgba(0, 0, 0, 0.3);
+    .sticky-note .date {
+      font-size: clamp(10px, 1vw, 14px);
+      color: #666;
     }
 
-    /* Date display */
-    .note-date {
-      text-align: right;
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 2rem;
-      padding-right: 0.5rem;
+    /* Save indicator - subtle, bottom center */
+    .save-indicator {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #999;
+      background: transparent;
+      padding: 0.25rem 0.5rem;
+      opacity: 0.7;
+      z-index: 10;
     }
 
-    /* Lyrics editor */
+    .save-indicator.saving { color: #666; }
+    .save-indicator.saved { color: #4a9d5f; }
+
     .lyrics-editor {
-      min-height: 500px;
+      position: absolute;
+      top: 20%;
+      left: 16%;
+      right: 10%;
+      bottom: 10%;
     }
 
     .lyrics-editor textarea {
+      font-size: clamp(12px, 1.1vw, 16px);
       width: 100%;
       height: 100%;
-      min-height: 500px;
       background: transparent;
       border: none;
       font-family: 'Courier New', monospace;
-      font-size: 1rem;
       line-height: 1.8;
       color: var(--text-dark);
-      resize: vertical;
+      resize: none;
       outline: none;
-      padding: 0.5rem;
+      padding: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .lyrics-editor textarea::placeholder {
       color: rgba(0, 0, 0, 0.3);
-    }
-
-    /* Auto-save indicator */
-    .save-indicator {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-size: 0.75rem;
-      color: #999;
-      padding: 0.25rem 0.5rem;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 4px;
-    }
-
-    .save-indicator.saving {
-      color: #666;
-    }
-
-    .save-indicator.saved {
-      color: #4a9d5f;
     }
 
     /* AI Chat Button */
@@ -198,27 +193,15 @@ export const WritingPage = () => {
       background: transparent;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s, filter 0.2s, opacity 0.3s;
       z-index: 1001;
       padding: 0;
-      opacity: 1;
+      transition: transform 0.2s, filter 0.2s, opacity 0.3s;
     }
 
-    .ai-chat-btn.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    .ai-chat-btn.hidden { opacity: 0; pointer-events: none; }
+    .ai-chat-btn:hover { transform: scale(1.1); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
 
-    .ai-chat-btn:hover {
-      transform: scale(1.1);
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-    }
-
-    .ai-chat-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+    .ai-chat-btn img { width: 100%; height: 100%; object-fit: contain; }
 
     /* Chat Sidebar */
     .chat-sidebar {
@@ -228,16 +211,14 @@ export const WritingPage = () => {
       width: 400px;
       height: 100vh;
       background: white;
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.2);
       transition: right 0.3s ease;
       z-index: 1000;
       display: flex;
       flex-direction: column;
     }
 
-    .chat-sidebar.open {
-      right: 0;
-    }
+    .chat-sidebar.open { right: 0; }
 
     .chat-sidebar-header {
       padding: 1.5rem;
@@ -248,10 +229,7 @@ export const WritingPage = () => {
       background: var(--paper-yellow);
     }
 
-    .chat-sidebar-header h3 {
-      font-size: 1.1rem;
-      color: var(--text-dark);
-    }
+    .chat-sidebar-header h3 { font-size: 1.1rem; color: var(--text-dark); }
 
     .close-chat-btn {
       background: none;
@@ -263,9 +241,7 @@ export const WritingPage = () => {
       line-height: 1;
     }
 
-    .close-chat-btn:hover {
-      color: #666;
-    }
+    .close-chat-btn:hover { color: #666; }
 
     .chat-messages {
       flex: 1;
@@ -274,37 +250,15 @@ export const WritingPage = () => {
       background: #fafafa;
     }
 
-    .chat-message {
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      border-radius: 8px;
-      max-width: 85%;
-    }
+    .chat-message { margin-bottom: 1rem; padding: 0.75rem; border-radius: 8px; max-width: 85%; }
+    .chat-message.user { background: #e5e5e5; margin-left: auto; }
+    .chat-message.assistant { background: white; border: 1px solid #e5e5e5; }
 
-    .chat-message.user {
-      background: #e5e5e5;
-      margin-left: auto;
-    }
-
-    .chat-message.assistant {
-      background: white;
-      border: 1px solid #e5e5e5;
-    }
-
-    .chat-input-area {
-      padding: 1rem;
-      border-top: 2px solid #e5e5e5;
-      background: white;
-    }
-
-    .chat-input-container {
-      display: flex;
-      gap: 0.5rem;
-    }
-
+    .chat-input-area { padding: 1rem; border-top: 2px solid #e5e5e5; background: white; }
+    .chat-input-container { display: flex; gap: 0.5rem; }
     .chat-input-container textarea {
       flex: 1;
-      padding: 0.75rem;
+      padding: 1rem;
       border: 2px solid #e5e5e5;
       border-radius: 8px;
       font-family: 'Courier New', monospace;
@@ -327,14 +281,57 @@ export const WritingPage = () => {
       align-self: flex-end;
     }
 
-    .chat-input-container button:hover {
-      background: #2a2020;
+    .chat-input-container button:hover { background: #2a2020; }
+    .chat-input-container button:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Selection context display */
+    .selection-context {
+      background: #f0f0f0;
+      border-left: 3px solid var(--bg-dark);
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      max-height: 150px;
+      overflow-y: auto;
     }
 
-    .chat-input-container button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    .selection-context-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #666;
     }
+
+    .selection-context-header button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #999;
+      padding: 0;
+    }
+
+    .selection-context-text {
+      white-space: pre-wrap;
+      color: var(--text-dark);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Minimal responsive adjustments */
+    @media (max-width: 1200px) {
+      main.sidebar-open {
+        margin-right: 0;
+      }
+
+      .chat-sidebar {
+        width: 100%;
+        right: -100%;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -354,39 +351,21 @@ export const WritingPage = () => {
   <main>
     <div class="notebook-container">
       <div class="notebook">
-        <div class="notebook-content">
-          <!-- Save indicator -->
-          <div class="save-indicator" id="saveIndicator">
-            All changes saved
-          </div>
+        <!-- Sticky note - positioned in top right -->
+        <div class="sticky-note">
+          <input type="text" id="noteTitle" placeholder="UNTITLED" />
+          <div class="date" id="noteDate"></div>
+        </div>
 
-          <!-- Title input -->
-          <input
-            type="text"
-            class="title-input"
-            id="noteTitle"
-            placeholder="Song Title"
-          />
-
-          <!-- Date display -->
-          <div class="note-date" id="noteDate">November 15, 2025</div>
-
-          <!-- Lyrics editor -->
-          <div class="lyrics-editor">
-            <textarea
-              id="lyricsContent"
-              placeholder="Start writing your lyrics here...
-
-Ask the AI for help with:
-  - Finding perfect rhymes
-  - Rewriting lines to be more poetic
-  - Brainstorming creative ideas
-  - Improving flow and rhythm"
-            ></textarea>
-          </div>
+        <!-- Lyrics editor inside notebook -->
+        <div class="lyrics-editor">
+          <textarea id="lyricsContent" placeholder="Start writing your lyrics here..."></textarea>
         </div>
       </div>
     </div>
+
+    <!-- Save indicator - outside notebook, bottom center -->
+    <div class="save-indicator" id="saveIndicator">All changes saved</div>
 
     <!-- AI Chat Button -->
     <button class="ai-chat-btn" onclick="toggleChatSidebar()" title="Open AI Co-Writer">
@@ -396,19 +375,22 @@ Ask the AI for help with:
     <!-- Chat Sidebar -->
     <div class="chat-sidebar" id="chatSidebar">
       <div class="chat-sidebar-header">
-        <h3>✍️ AI Co-Writer</h3>
+        <h3>AI Co-Writer</h3>
         <button class="close-chat-btn" onclick="toggleChatSidebar()">&times;</button>
       </div>
       <div class="chat-messages" id="chatMessages">
-        <!-- Messages will appear here -->
+        <!-- Selection context will be inserted here -->
+        <div id="selectionContext" style="display: none;" class="selection-context">
+          <div class="selection-context-header">
+            <span>Selected lyrics:</span>
+            <button onclick="clearSelection()">&times;</button>
+          </div>
+          <div class="selection-context-text" id="selectionText"></div>
+        </div>
       </div>
       <div class="chat-input-area">
         <div class="chat-input-container">
-          <textarea
-            id="chatInput"
-            placeholder="Ask for help with rhymes, rewrites, ideas..."
-            rows="2"
-          ></textarea>
+          <textarea id="chatInput" placeholder="Ask for help with rhymes, rewrites, ideas..." rows="2"></textarea>
           <button id="sendChatBtn" onclick="sendChatMessage()">Send</button>
         </div>
       </div>
@@ -421,7 +403,6 @@ Ask the AI for help with:
     const lyricsTextarea = document.getElementById('lyricsContent');
     const saveIndicator = document.getElementById('saveIndicator');
 
-    // Load existing note
     async function loadNote() {
       try {
         const response = await fetch('/api/note/current');
@@ -430,26 +411,18 @@ Ask the AI for help with:
           if (data.title) titleInput.value = data.title;
           if (data.content) lyricsTextarea.value = data.content;
         }
-      } catch (error) {
-        console.error('Error loading note:', error);
-      }
+      } catch (error) { console.error('Error loading note:', error); }
     }
 
-    // Auto-save function
     async function saveNote() {
       saveIndicator.textContent = 'Saving...';
       saveIndicator.className = 'save-indicator saving';
-
       try {
         const response = await fetch('/api/note/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: titleInput.value,
-            content: lyricsTextarea.value
-          })
+          body: JSON.stringify({ title: titleInput.value, content: lyricsTextarea.value })
         });
-
         if (response.ok) {
           saveIndicator.textContent = 'All changes saved';
           saveIndicator.className = 'save-indicator saved';
@@ -460,7 +433,6 @@ Ask the AI for help with:
       }
     }
 
-    // Debounced save
     function debouncedSave() {
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(saveNote, 1000);
@@ -469,66 +441,83 @@ Ask the AI for help with:
     titleInput?.addEventListener('input', debouncedSave);
     lyricsTextarea?.addEventListener('input', debouncedSave);
 
-    // Update date
+    // Update date dynamically
     const dateEl = document.getElementById('noteDate');
     const now = new Date();
-    dateEl.textContent = now.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    });
+    dateEl.textContent = now.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
 
-    // Load note on page load
     loadNote();
 
-    // Chat Sidebar Functions
+    // Chat sidebar and selection handling
+    let currentSelection = '';
+
     function toggleChatSidebar() {
       const sidebar = document.getElementById('chatSidebar');
       const chatBtn = document.querySelector('.ai-chat-btn');
       const mainEl = document.querySelector('main');
-
       sidebar.classList.toggle('open');
       chatBtn.classList.toggle('hidden');
       mainEl.classList.toggle('sidebar-open');
+
+      // Capture any selected text when opening
+      if (sidebar.classList.contains('open')) {
+        captureSelection();
+      }
     }
+
+    function captureSelection() {
+      const selection = lyricsTextarea.value.substring(
+        lyricsTextarea.selectionStart,
+        lyricsTextarea.selectionEnd
+      );
+      if (selection.trim()) {
+        currentSelection = selection;
+        document.getElementById('selectionText').textContent = selection;
+        document.getElementById('selectionContext').style.display = 'block';
+      }
+    }
+
+    function clearSelection() {
+      currentSelection = '';
+      document.getElementById('selectionContext').style.display = 'none';
+    }
+
+    // Listen for text selection changes
+    lyricsTextarea?.addEventListener('mouseup', () => {
+      const sidebar = document.getElementById('chatSidebar');
+      if (sidebar.classList.contains('open')) {
+        captureSelection();
+      }
+    });
 
     async function sendChatMessage() {
       const chatInput = document.getElementById('chatInput');
       const chatMessages = document.getElementById('chatMessages');
       const sendBtn = document.getElementById('sendChatBtn');
       const message = chatInput.value.trim();
-
       if (!message) return;
-
-      // Add user message to UI
       const userMsg = document.createElement('div');
       userMsg.className = 'chat-message user';
       userMsg.textContent = message;
       chatMessages.appendChild(userMsg);
-
       chatInput.value = '';
       sendBtn.disabled = true;
-
-      // Scroll to bottom
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
-      // Send to API
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({
+            message,
+            context: currentSelection ? 'Selected lyrics:\\n' + currentSelection + '\\n\\nUser question: ' + message : message
+          })
         });
-
         const data = await response.json();
-
-        // Add assistant response
         const assistantMsg = document.createElement('div');
         assistantMsg.className = 'chat-message assistant';
         assistantMsg.textContent = data.response;
         chatMessages.appendChild(assistantMsg);
-
-        // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
       } catch (error) {
         console.error('Error sending message:', error);
@@ -536,12 +525,9 @@ Ask the AI for help with:
         errorMsg.className = 'chat-message assistant';
         errorMsg.textContent = 'Sorry, I encountered an error. Please try again.';
         chatMessages.appendChild(errorMsg);
-      } finally {
-        sendBtn.disabled = false;
-      }
+      } finally { sendBtn.disabled = false; }
     }
 
-    // Allow Enter to send (Shift+Enter for new line)
     document.getElementById('chatInput')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
