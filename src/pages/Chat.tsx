@@ -276,7 +276,7 @@ export const ChatPage = () => {
     <div class="chat-page">
       <div class="chat-header">
         <h1>Chat</h1>
-        <p>Long-form conversation history with your songwriting assistant</p>
+        <p>Long-form conversation history with your songwriting assistant.</p>
       </div>
 
       <div class="chat-history" id="chatHistory">
