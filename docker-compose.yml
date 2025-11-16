@@ -12,12 +12,10 @@ services:
       # Mount source code for hot reloading
       - ./src:/app/src
       - ./wrangler.toml:/app/wrangler.toml
-      # Preserve node_modules in container
-      - /app/node_modules
     environment:
       - NODE_ENV=development
       - WRANGLER_SEND_METRICS=false
-    command: npm run dev
+    command: npm run dev 
     networks:
       - songbook-network
     restart: unless-stopped
