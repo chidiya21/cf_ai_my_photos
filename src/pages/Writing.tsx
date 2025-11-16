@@ -276,7 +276,7 @@ export const WritingPage = () => {
       border-radius: 8px;
       cursor: pointer;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       transition: background 0.2s;
       align-self: flex-end;
     }
@@ -390,7 +390,7 @@ export const WritingPage = () => {
       </div>
       <div class="chat-input-area">
         <div class="chat-input-container">
-          <textarea id="chatInput" placeholder="Ask for help with rhymes, rewrites, ideas..." rows="2"></textarea>
+          <textarea id="chatInput" placeholder="Select lyrics to ask AI for help with rhymes, rewrites, ideas..." rows="2"></textarea>
           <button id="sendChatBtn" onclick="sendChatMessage()">Send</button>
         </div>
       </div>
@@ -399,17 +399,41 @@ export const WritingPage = () => {
 
   <script>
     let saveTimeout;
+    let currentNoteId = null;
     const titleInput = document.getElementById('noteTitle');
     const lyricsTextarea = document.getElementById('lyricsContent');
     const saveIndicator = document.getElementById('saveIndicator');
 
+    // Get note ID from URL or create new
+    const urlParams = new URLSearchParams(window.location.search);
+    const noteIdFromUrl = urlParams.get('id');
+
     async function loadNote() {
       try {
-        const response = await fetch('/api/note/current');
+        if (!noteIdFromUrl) {
+          // No ID in URL means brand new note - don't load anything
+          currentNoteId = null;
+          titleInput.value = '';
+          lyricsTextarea.value = '';
+          return;
+        }
+
+        const url = \`/api/note/current?id=\${noteIdFromUrl}\`;
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-          if (data.title) titleInput.value = data.title;
-          if (data.content) lyricsTextarea.value = data.content;
+          currentNoteId = data.id;
+
+          // Only populate if this note has been saved before (has content or a real title)
+          if (data.content || (data.title && data.title !== 'Untitled')) {
+            titleInput.value = data.title || '';
+            lyricsTextarea.value = data.content || '';
+          } else {
+            // New note with this ID
+            currentNoteId = noteIdFromUrl;
+            titleInput.value = '';
+            lyricsTextarea.value = '';
+          }
         }
       } catch (error) { console.error('Error loading note:', error); }
     }
@@ -418,12 +442,27 @@ export const WritingPage = () => {
       saveIndicator.textContent = 'Saving...';
       saveIndicator.className = 'save-indicator saving';
       try {
+        // If no current note ID, create a new unique ID
+        if (!currentNoteId) {
+          currentNoteId = 'note-' + Date.now();
+        }
+
         const response = await fetch('/api/note/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title: titleInput.value, content: lyricsTextarea.value })
+          body: JSON.stringify({
+            id: currentNoteId,
+            title: titleInput.value || 'Untitled',
+            content: lyricsTextarea.value
+          })
         });
         if (response.ok) {
+          const result = await response.json();
+          currentNoteId = result.note.id;
+          // Update URL without reloading page
+          if (!noteIdFromUrl) {
+            window.history.replaceState({}, '', \`/writing?id=\${currentNoteId}\`);
+          }
           saveIndicator.textContent = 'All changes saved';
           saveIndicator.className = 'save-indicator saved';
         }
@@ -505,18 +544,28 @@ export const WritingPage = () => {
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
       try {
+        // If there's selected lyrics, add context to the message
+        const messageWithContext = currentSelection
+          ? 'Selected lyrics from my song:\\n' + currentSelection + '\\n\\nMy question: ' + message
+          : message;
+
         const response = await fetch('/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message,
-            context: currentSelection ? 'Selected lyrics:\\n' + currentSelection + '\\n\\nUser question: ' + message : message
-          })
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Session-ID': 'writing-session'
+          },
+          body: JSON.stringify({ message: messageWithContext })
         });
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
         const data = await response.json();
         const assistantMsg = document.createElement('div');
         assistantMsg.className = 'chat-message assistant';
-        assistantMsg.textContent = data.response;
+        assistantMsg.textContent = data.response || 'No response received.';
         chatMessages.appendChild(assistantMsg);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       } catch (error) {
