@@ -89,10 +89,6 @@ src/
     └── NoteCoordinator.ts
 ```
 
-## License
-
-MIT
-
 ## Contact
 
 Shriya Sateesh, sshriya@cs.washington.edu
