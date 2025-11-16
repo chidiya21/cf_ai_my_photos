@@ -143,7 +143,7 @@ export const RecordingsPage = () => {
     .recording-icon {
       width: 48px;
       height: 48px;
-      background: var(--paper-yellow);
+      background: OldLace;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -250,7 +250,7 @@ export const RecordingsPage = () => {
             });
 
             item.innerHTML = \`
-              <div class="recording-icon">🎵</div>
+              <div class="recording-icon">🎶</div>
               <div class="recording-info">
                 <h3>\${recording.name}</h3>
                 <div class="date">\${date}</div>
@@ -292,9 +292,26 @@ export const RecordingsPage = () => {
       }
     }
 
-    function playRecording(id) {
-      // Implement play functionality
-      window.open(\`/api/recordings/\${id}/play\`, '_blank');
+    async function playRecording(id) {
+      try {
+        // Create an audio player if one doesn't exist
+        let audioPlayer = document.getElementById('audioPlayer');
+        if (!audioPlayer) {
+          audioPlayer = document.createElement('audio');
+          audioPlayer.id = 'audioPlayer';
+          audioPlayer.controls = true;
+          audioPlayer.style.cssText = 'position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);';
+          document.body.appendChild(audioPlayer);
+        }
+
+        // Set the source and play
+        audioPlayer.src = \`/api/recordings/\${id}/play\`;
+        audioPlayer.load();
+        await audioPlayer.play();
+      } catch (error) {
+        console.error('Error playing recording:', error);
+        alert('Error playing recording. Please try again.');
+      }
     }
 
     function downloadRecording(id) {

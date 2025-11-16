@@ -242,6 +242,34 @@ app.get('/api/recordings', async (c) => {
   }
 });
 
+app.get('/api/recordings/:id/play', async (c) => {
+  try {
+    const recordingId = c.req.param('id');
+    const recordingsList = await c.env.NOTES_KV.get('recordings-list', 'json') || [];
+    const recording = recordingsList.find((r: any) => r.id === recordingId);
+
+    if (!recording) {
+      return c.json({ error: 'Recording not found' }, 404);
+    }
+
+    const object = await c.env.RECORDINGS.get(recording.fileName);
+
+    if (!object) {
+      return c.json({ error: 'File not found' }, 404);
+    }
+
+    return new Response(object.body, {
+      headers: {
+        'Content-Type': recording.type,
+        'Accept-Ranges': 'bytes'
+      }
+    });
+  } catch (error) {
+    console.error('Error playing recording:', error);
+    return c.json({ error: 'Failed to play recording' }, 500);
+  }
+});
+
 app.get('/api/recordings/:id/download', async (c) => {
   try {
     const recordingId = c.req.param('id');

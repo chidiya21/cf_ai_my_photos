@@ -176,7 +176,7 @@ export const PagesPage = () => {
   </nav>
 
   <main>
-    <button class="new-page-btn" onclick="window.location.href='/writing'">
+    <button class="new-page-btn" onclick="createNewSong()">
       + New Song
     </button>
 
@@ -189,6 +189,13 @@ export const PagesPage = () => {
   </main>
 
   <script>
+    function createNewSong() {
+      // Generate a unique ID for the new song
+      const newNoteId = 'note-' + Date.now();
+      // Navigate to writing page with new note ID
+      window.location.href = \`/writing?id=\${newNoteId}\`;
+    }
+
     async function loadPages() {
       try {
         const response = await fetch('/api/notes');
@@ -199,6 +206,9 @@ export const PagesPage = () => {
           if (notes.length === 0) return;
 
           grid.innerHTML = '';
+
+          // Sort notes by last modified (newest first)
+          notes.sort((a, b) => b.lastModified - a.lastModified);
 
           notes.forEach(note => {
             const card = document.createElement('div');
@@ -211,10 +221,10 @@ export const PagesPage = () => {
               year: 'numeric'
             });
 
-            const preview = note.content.slice(0, 150) + (note.content.length > 150 ? '...' : '');
+            const preview = note.content ? note.content.slice(0, 150) + (note.content.length > 150 ? '...' : '') : 'Empty song';
 
             card.innerHTML = \`
-              <h3>\${note.title}</h3>
+              <h3>\${note.title || 'Untitled'}</h3>
               <div class="date">\${date}</div>
               <div class="preview">\${preview}</div>
             \`;
